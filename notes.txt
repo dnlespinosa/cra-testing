@@ -1,0 +1,90 @@
+Testing 
+    Describe what react-testing-library is and how it works 
+    Write SMOKE tests 
+    Write snapshot tests 
+    write test to mimic user interaction with our applications 
+
+Testing In React 
+    React can use ANY testing framework 
+    CRA uses jest and react testing library 
+    npm test is set up to find and run jest tests 
+        Files like .test .spec or in _tests_ folder 
+        At Rithm, we prefer *.test.js in the same folder as the component 
+
+React Testing Library 
+    Guiding Principle - the more your tests resemble the way your software is used the more confidence they can give you 
+    Tests focus on mimicking what the users do versus implementation details 
+    The approach - the way a user is going to interact with your page is usually by text
+        Links are text 
+        Type in text 
+        Look at text on page 
+    WE CAN SEARCH OR FIND ELEMENTS BASED ON TEXT 
+
+Two Types 
+    Smoke Tests 
+        Does the component render or does it blow up? 
+    Snapshot Tests 
+        Does the component rendered HTML render in the way you expect? 
+
+Smoke Tests
+    it("renders without crashing", function() {
+        render(<Counter />);
+    });
+
+
+SnapShot  
+    Smoke tests are easy to writeSnapshots are also easy, but go a bit further
+        Did the rendering change? 
+    
+    Render Revisited 
+        Returns an object of methods 
+        One method is called asFragment 
+            asFragment returns the underlying DOM structure of the component 
+                very useful in snapshots 
+    it('matches snapshot)', function() {
+        const {asFragment} = render(<FixedComponent />)
+        expect(asFragment()).toMatchSnapshot();
+    }
+
+    When running these tests, a new folder will be created 
+        _snapshots_
+    
+    If you edit the file then run the test 
+        You're going to fail the test because it doesn't match the original snapshot 
+        You need to update the snapshot 
+            after the test runs and fails, press u
+            LOOK AT ME LOOK AT ME LOOK AT ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            this will update the new change 
+    
+Specialized Testing 
+    How do we test how people will interact with out apps 
+        Events, form submits, etc 
+    Find Elements in the DOM base on text
+        .getByText() - throws err if nothing found
+        .queryByText() - returns null if nothing found
+        .getAllByText()
+        .queryAllByText()
+    .getByPlaceHolder()/.queryByPlaceholder()
+    .getAllByPlaceholder()/.queryAllByPlaceholder()
+    .getByTestId()/.queryByTestId() - find matching element by data-testid attribute 
+    .getAllByTestId()/.queryAllByTestId()
+
+Extended Matchers 
+    By default projects with create react app come with a setup file that extends the matching capability of jest 
+    import '@testing-library/jest-dom/extend-expect';
+    setupTest.js 
+    should already be setup with CRA 
+
+    .toHaveClass() - whether an element has a class or not 
+    .toBeInTheDocument()
+    .toContainHTML() - does the element contain some string of html, not commonly used 
+    .toBeEmpty() - does the element contain ANY content - expecting to NOT contain content 
+
+Testing Events 
+    React Testing library provides a fireEvent method that you can use to mimic user interaction with your app 
+
+Debugging Tests 
+    if you want to set break points, YOU NEED TO EDIT YOUR PACKAGE.JSON TO INCLUDE:
+        scripts: {
+            'test:debug': 'react-scripts --inespect-brk test --runInBand''
+        }
